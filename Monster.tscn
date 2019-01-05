@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://KinematicBody2D.gd" type="Script" id=1]
+[ext_resource path="res://sprites/Monster1.png" type="Texture" id=2]
+[ext_resource path="res://sprites/Monster2.png" type="Texture" id=3]
+[ext_resource path="res://sprites/Monster3.png" type="Texture" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 16, 8 )
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 8.0
+} ]
+
+[node name="Monster" type="Node2D"]
+
+[node name="KinematicBody2D" type="KinematicBody2D" parent="." index="0"]
+
+input_pickable = false
+collision_layer = 11
+collision_mask = 3
+collision/safe_margin = 0.08
+script = ExtResource( 1 )
+_sections_unfolded = [ "Collision", "collision" ]
+
+[node name="RayCast2D" type="RayCast2D" parent="KinematicBody2D" index="0"]
+
+position = Vector2( -8, 0 )
+enabled = true
+exclude_parent = true
+cast_to = Vector2( 0, 12 )
+collision_mask = 9
+_sections_unfolded = [ "Transform" ]
+
+[node name="RayCast2D2" type="RayCast2D" parent="KinematicBody2D" index="1"]
+
+position = Vector2( -8, 0 )
+enabled = true
+exclude_parent = true
+cast_to = Vector2( -9, 0 )
+collision_mask = 41
+_sections_unfolded = [ "Transform" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D" index="2"]
+
+shape = SubResource( 1 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Node2D" type="AnimatedSprite" parent="KinematicBody2D" index="3"]
+
+frames = SubResource( 2 )
+animation = "default"
+frame = 3
+playing = true
+
+

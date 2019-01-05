@@ -1,0 +1,167 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://PlayerBody2D.gd" type="Script" id=1]
+[ext_resource path="res://sprites/Wizard2.png" type="Texture" id=2]
+[ext_resource path="res://sprites/Wizard1.png" type="Texture" id=3]
+[ext_resource path="res://sprites/Wizard3.png" type="Texture" id=4]
+[ext_resource path="res://sprites/Sprite-0005/Sprite-0005-0.png" type="Texture" id=5]
+[ext_resource path="res://sprites/Sprite-0005/Sprite-0005-1.png" type="Texture" id=6]
+[ext_resource path="res://sprites/Sprite-0005/Sprite-0005-2.png" type="Texture" id=7]
+[ext_resource path="res://AnimatedSprite.gd" type="Script" id=8]
+[ext_resource path="res://Area2D.gd" type="Script" id=9]
+[ext_resource path="res://sounds/swoosh.wav" type="AudioStream" id=10]
+[ext_resource path="res://sounds/hit5.wav" type="AudioStream" id=11]
+[ext_resource path="res://sprites/UI/Cookie.png" type="Texture" id=12]
+[ext_resource path="res://Sprite.gd" type="Script" id=13]
+[ext_resource path="res://Camera2D.gd" type="Script" id=14]
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ), ExtResource( 2 ), ExtResource( 4 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "walking",
+"speed": 8.0
+} ]
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [ ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ) ],
+"loop": false,
+"name": "default",
+"speed": 8.0
+} ]
+
+[sub_resource type="CircleShape2D" id=3]
+
+custom_solver_bias = 0.0
+radius = 12.0
+
+[sub_resource type="RectangleShape2D" id=4]
+
+custom_solver_bias = 0.0
+extents = Vector2( 8, 8 )
+
+[node name="Node2D" type="Node2D" index="0"]
+
+_sections_unfolded = [ "Transform", "Visibility" ]
+
+[node name="PlayerBody2D" type="KinematicBody2D" parent="." index="0"]
+
+input_pickable = false
+collision_layer = 193
+collision_mask = 193
+collision/safe_margin = 0.08
+script = ExtResource( 1 )
+_sections_unfolded = [ "Applied Forces", "Collision", "Transform", "collision" ]
+
+[node name="Sprite" type="AnimatedSprite" parent="PlayerBody2D" index="0"]
+
+frames = SubResource( 1 )
+animation = "idle"
+playing = true
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="PlayerBody2D/Sprite" index="0"]
+
+scale = Vector2( 1, -1 )
+frames = SubResource( 2 )
+animation = "default"
+offset = Vector2( 6, 0 )
+flip_h = true
+script = ExtResource( 8 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Area2D" type="Area2D" parent="PlayerBody2D/Sprite/AnimatedSprite" index="0"]
+
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision_layer = 2
+collision_mask = 2
+audio_bus_override = false
+audio_bus_name = "Master"
+script = ExtResource( 9 )
+_sections_unfolded = [ "Collision", "Pickable" ]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="PlayerBody2D/Sprite/AnimatedSprite/Area2D" index="0"]
+
+scale = Vector2( 1, -1 )
+stream = ExtResource( 10 )
+volume_db = -9.49
+pitch_scale = 1.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="HitSound" type="AudioStreamPlayer2D" parent="PlayerBody2D/Sprite/AnimatedSprite/Area2D" index="1"]
+
+scale = Vector2( 1, -1 )
+stream = ExtResource( 11 )
+volume_db = -9.49
+pitch_scale = 1.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerBody2D/Sprite/AnimatedSprite/Area2D" index="2"]
+
+scale = Vector2( 1, -1 )
+shape = SubResource( 3 )
+_sections_unfolded = [ "Material", "Transform", "Visibility" ]
+
+[node name="Sprite" type="Sprite" parent="PlayerBody2D/Sprite" index="1"]
+
+scale = Vector2( 1e-005, 1e-005 )
+texture = ExtResource( 12 )
+region_enabled = true
+region_rect = Rect2( -256, -256, 1024, 1024 )
+script = ExtResource( 13 )
+_sections_unfolded = [ "Animation", "Region", "Transform", "Z Index" ]
+
+[node name="Camera2D" type="Camera2D" parent="PlayerBody2D" index="1"]
+
+anchor_mode = 1
+rotating = false
+current = true
+zoom = Vector2( 1, 1 )
+limit_left = -10000000
+limit_top = -10000000
+limit_right = 10000000
+limit_bottom = 10000000
+limit_smoothed = false
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = false
+smoothing_speed = 5.0
+offset_v = 0.0
+offset_h = 0.0
+drag_margin_left = 0.02
+drag_margin_top = 0.05
+drag_margin_right = 0.02
+drag_margin_bottom = 0.05
+editor_draw_screen = true
+editor_draw_limits = false
+editor_draw_drag_margin = false
+script = ExtResource( 14 )
+_sections_unfolded = [ "Drag Margin", "Limit", "Offset", "Smoothing" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerBody2D" index="2"]
+
+shape = SubResource( 4 )
+_sections_unfolded = [ "Transform" ]
+
+[connection signal="body_entered" from="PlayerBody2D/Sprite/AnimatedSprite/Area2D" to="PlayerBody2D/Sprite/AnimatedSprite/Area2D" method="_on_Area2D_body_entered"]
+
+
